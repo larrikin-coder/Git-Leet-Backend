@@ -1,0 +1,35 @@
+// server.js
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
+
+const CLIENT_ID = "YOUR_GITHUB_CLIENT_ID";
+const CLIENT_SECRET = "YOUR_GITHUB_CLIENT_SECRET";
+
+const app = express();
+app.use(cors());
+
+app.get("/oauth/callback", async (req, res) => {
+  const code = req.query.code;
+
+  const tokenRes = await axios.post(
+    "https://github.com/login/oauth/access_token",
+    {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      code,
+    },
+    {
+      headers: { Accept: "application/json" },
+    }
+  );
+
+  const access_token = tokenRes.data.access_token;
+  res.redirect(
+    `https://<your-extension-id>.chromiumapp.org?token=${access_token}`
+  );
+});
+
+app.listen(3000, () =>
+  console.log("OAuth backend running on http://localhost:3000")
+);
