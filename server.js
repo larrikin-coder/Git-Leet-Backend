@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-
+const EXTENSION_ID = process.env.EXTENSION_ID;
 const app = express();
 app.use(cors());
 
@@ -28,7 +28,7 @@ app.get("/oauth/callback", async (req, res) => {
 
   const access_token = tokenRes.data.access_token;
   res.redirect(
-    `https://<your-extension-id>.chromiumapp.org?token=${access_token}`
+    `https://${EXTENSION_ID}.chromiumapp.org?token=${access_token}`
   );
 });
 
